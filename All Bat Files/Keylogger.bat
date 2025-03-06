@@ -13,19 +13,8 @@ REM Step 3: Open Microsoft Store for Python 3.12 installation
 echo Opening Microsoft Store for Python 3.12 installation...
 start ms-windows-store://pdp/?productid=9NCVDN91XZQP
 
-REM Wait until Python is installed
-echo Waiting for Python 3.12 to be installed...
-:check_python
-where python >nul 2>&1
-if %errorlevel% neq 0 (
-    echo Python is not installed yet. Waiting...
-    timeout /t 10 >nul
-    goto check_python
-)
-
-echo Python is installed.
-
-echo Waiting for 2 minutes before proceeding...
+REM Wait for 2 minutes to allow manual installation
+echo Waiting for 2 minutes to allow manual Python installation...
 timeout /t 120 >nul
 
 REM Step 5: Install the 'keyboard' module
