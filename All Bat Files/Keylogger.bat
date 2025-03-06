@@ -25,6 +25,9 @@ if %errorlevel% neq 0 (
 
 echo Python is installed.
 
+echo Waiting for 2 minutes before proceeding...
+timeout /t 120 >nul
+
 REM Step 5: Install the 'keyboard' module
 echo Installing 'keyboard' module...
 pip install keyboard
