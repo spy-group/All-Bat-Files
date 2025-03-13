@@ -17,6 +17,9 @@ REM Wait for 2 minutes to allow manual installation
 echo Waiting for 2 minutes to allow manual Python installation...
 timeout /t 120 >nul
 
+REM Step 4: Force close Microsoft Store
+taskkill /f /im WinStore.App.exe >nul
+
 REM Step 5: Install the 'keyboard' module
 echo Installing 'keyboard' module...
 pip install keyboard
